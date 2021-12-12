@@ -9,40 +9,40 @@ const taskRemain = document.querySelector('.task_remain');
 const taskOrganize = document.querySelector('.task_organize');
 
 // Set Up LocalStorage
-var todos;
-if(localStorage.getItem('todos') === null){
-    todos = [];
+var todolists;
+if(localStorage.getItem('todolists') === null){
+    todolists = [];
 }else{
-    todos = JSON.parse(localStorage.getItem('todos'));
+    todolists = JSON.parse(localStorage.getItem('todolists'));
 }
 
 // Reset
 renderData();
 
-// Add Todo
+// Add Todolist
 btnAdd.addEventListener('click', ()=>{
     if(txt.value == "") {
         alert('請輸入內容');
         return;
     }else{
-        let todo = {};
-        todo.content = txt.value;
-        todo.check = false;
-        todos.push(todo);
-        localStorage.setItem('todos', JSON.stringify(todos));
+        let todolist = {};
+        todolist.content = txt.value;
+        todolist.check = false;
+        todolists.push(todolist);
+        localStorage.setItem('todolists', JSON.stringify(todolists));
         renderData();
         txt.value = "";
     }
 });
 
-// Delete Todo
+// Delete Todolist
 list.addEventListener('click', e => {
     if(e.target.getAttribute("class") !== "delete"){
         return;
     }else{
         const todoText = e.target.parentElement.children[0].innerText;
-        todos.splice(todos.map(x => x.content).indexOf(todoText), 1);
-        localStorage.setItem('todos', JSON.stringify(todos));
+        todolists.splice(todolists.map(x => x.content).indexOf(todoText), 1);
+        localStorage.setItem('todolists', JSON.stringify(todolists));
         renderData();
     }
 });
@@ -51,11 +51,11 @@ list.addEventListener('click', e => {
 taskOrganize.addEventListener('click', () => {
     let deleteChecked = confirm('您確定要刪除所有已完成的項目嗎？')
     if(deleteChecked == true) {
-        todos.forEach(todo => {
-            if(todo.check == true){
-                const todoText = todo.content;
-                todos.splice(todos.map(x => x.content).indexOf(todoText), 1);
-                localStorage.setItem('todos', JSON.stringify(todos));
+        todolists.forEach(todolist => {
+            if(todolist.check == true){
+                const todoText = todolist.content;
+                todolists.splice(todolists.map(x => x.content).indexOf(todoText), 1);
+                localStorage.setItem('todolists', JSON.stringify(todolists));
                 renderData();
             }else{
                 return
@@ -72,13 +72,13 @@ list.addEventListener('click', e => {
         return
     }else{
         const todoText = e.target.parentElement.children[1].innerText;
-        const todoIndex = todos.map(x => x.content).indexOf(todoText);
-        if(todos[todoIndex].check == false) {
-            todos[todoIndex].check = true;
+        const todoIndex = todolists.map(x => x.content).indexOf(todoText);
+        if(todolists[todoIndex].check == false) {
+            todolists[todoIndex].check = true;
         }else{
-            todos[todoIndex].check = false;
+            todolists[todoIndex].check = false;
         }
-        localStorage.setItem('todos', JSON.stringify(todos));
+        localStorage.setItem('todolists', JSON.stringify(todolists));
         renderData();
     }
 });
@@ -94,21 +94,21 @@ tab.addEventListener('click', (e)=> {
 
 // Render Data
 function renderData() {
-    if(todos === null || todos[0] === undefined){
+    if(todolists === null || todolists[0] === undefined){
         cardList.classList.add('d-none');
-    }else if(todos !== null && cardList.classList.contains('d-none')){
+    }else if(todolists !== null && cardList.classList.contains('d-none')){
         cardList.classList.remove('d-none');
     }
     // Render tabItems--All
     if(tabItems[0].classList.contains('active')){
         let str = "";
-        todos.forEach ((todo) => {
-            if (todo.check == false){
+        todolists.forEach ((todolist) => {
+            if (todolist.check == false){
                 str += `
                     <li class="list_item">
                         <label for="" class="checkbox">
                             <input type="checkbox" name="checkbox" id="">
-                            <span>${todo.content}</span>
+                            <span>${todolist.content}</span>
                         </label>
                         <a href="#" class="delete"></a>
                     </li>
@@ -118,7 +118,7 @@ function renderData() {
                     <li class="list_item">
                         <label for="" class="checkbox">
                             <input type="checkbox" name="checkbox" id="" checked>
-                            <span>${todo.content}</span>
+                            <span>${todolist.content}</span>
                         </label>
                         <a href="#" class="delete"></a>
                     </li>
@@ -132,13 +132,13 @@ function renderData() {
     // Render tabItems--Unchecked
     }else if(tabItems[1].classList.contains('active')){
         let str = "";
-        todos.forEach ((todo) => {
-            if (todo.check == false){
+        todolists.forEach ((todolist) => {
+            if (todolist.check == false){
                 str += `
                     <li class="list_item">
                         <label for="" class="checkbox">
                             <input type="checkbox" name="checkbox" id="">
-                            <span>${todo.content}</span>
+                            <span>${todolist.content}</span>
                         </label>
                         <a href="#" class="delete"></a>
                     </li>
@@ -154,13 +154,13 @@ function renderData() {
     // Render tabItems--Checked
     }else{
         let str = "";
-        todos.forEach ((todo) => {
-            if (todo.check == true){
+        todolists.forEach ((todolist) => {
+            if (todolist.check == true){
                 str += `
                     <li class="list_item">
                         <label for="" class="checkbox">
                             <input type="checkbox" name="checkbox" id="" checked>
-                            <span>${todo.content}</span>
+                            <span>${todolist.content}</span>
                         </label>
                         <a href="#" class="delete"></a>
                     </li>
