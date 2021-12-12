@@ -356,3 +356,7 @@ input[type="text"]::placeholder {
 .checkbox input:checked ~ span::after {
   opacity: 1;
 }
+
+body .d-none {
+  display: none;
+}

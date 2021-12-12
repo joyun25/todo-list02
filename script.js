@@ -1,6 +1,7 @@
 // Selectors
 const txt = document.querySelector('.txt');
 const btnAdd = document.querySelector('.btn_add');
+const cardList = document.querySelector('.card_list');
 const tab = document.querySelector('.tab');
 const tabItems = document.querySelectorAll('.tab_item');
 const list = document.querySelector('.list');
@@ -13,8 +14,10 @@ if(localStorage.getItem('todos') === null){
     todos = [];
 }else{
     todos = JSON.parse(localStorage.getItem('todos'));
-    renderData();
 }
+
+// Reset
+renderData();
 
 // Add Todo
 btnAdd.addEventListener('click', ()=>{
@@ -91,6 +94,11 @@ tab.addEventListener('click', (e)=> {
 
 // Render Data
 function renderData() {
+    if(todos === null || todos[0] === undefined){
+        cardList.classList.add('d-none');
+    }else if(todos !== null && cardList.classList.contains('d-none')){
+        cardList.classList.remove('d-none');
+    }
     // Render tabItems--All
     if(tabItems[0].classList.contains('active')){
         let str = "";
