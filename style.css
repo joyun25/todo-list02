@@ -226,7 +226,7 @@ input[type="text"]::placeholder {
   width: 1rem;
   height: 1rem;
   background: #000;
-  background-image: url("../img/deleteIcon.jpg");
+  background-image: url("img/deleteIcon.jpg");
   background-size: contain;
 }
 
