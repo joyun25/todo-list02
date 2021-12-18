@@ -101,77 +101,108 @@ function renderData() {
     }
     // Render tabItems--All
     if(tabItems[0].classList.contains('active')){
-        let str = "";
+        list.innerHTML = '';
         todolists.forEach ((todolist) => {
             if (todolist.check == false){
-                str += `
-                    <li class="list_item">
-                        <label for="" class="checkbox">
-                            <input type="checkbox" name="checkbox" id="">
-                            <span>${todolist.content}</span>
-                        </label>
-                        <a href="#" class="delete"></a>
-                    </li>
-                `
+                const createLi = document.createElement('li');
+                const createLabel = document.createElement('label');
+                const createInput = document.createElement('input');
+                const createSpan = document.createElement('span');
+                const createA = document.createElement('a');
+                createLi.classList.add('list_item');
+                createLabel.classList.add('checkbox');
+                createA.classList.add('delete');
+                createInput.type = 'checkbox';
+                createInput.name = 'checkbox';
+                createSpan.innerText = todolist.content;
+                createA.href = '#';
+                createLabel.appendChild(createInput);
+                createLabel.appendChild(createSpan);
+                createLi.appendChild(createLabel);
+                createLi.appendChild(createA);
+                list.appendChild(createLi);
             }else{
-                str += `
-                    <li class="list_item">
-                        <label for="" class="checkbox">
-                            <input type="checkbox" name="checkbox" id="" checked>
-                            <span>${todolist.content}</span>
-                        </label>
-                        <a href="#" class="delete"></a>
-                    </li>
-                `
+                const createLi = document.createElement('li');
+                const createLabel = document.createElement('label');
+                const createInput = document.createElement('input');
+                const createSpan = document.createElement('span');
+                const createA = document.createElement('a');
+                createLi.classList.add('list_item');
+                createLabel.classList.add('checkbox');
+                createA.classList.add('delete');
+                createInput.checked = true;
+                createInput.type = 'checkbox';
+                createInput.name = 'checkbox';
+                createSpan.innerText = todolist.content;
+                createA.href = '#';
+                createLabel.appendChild(createInput);
+                createLabel.appendChild(createSpan);
+                createLi.appendChild(createLabel);
+                createLi.appendChild(createA);
+                list.appendChild(createLi);
             }
         });
-        list.innerHTML = str;
         const listItem = document.querySelectorAll('.list_item');
-        taskRemain.innerHTML = `總共 ${listItem.length} 個項目`;
+        taskRemain.innerText = `總共 ${listItem.length} 個項目`;
 
     // Render tabItems--Unchecked
     }else if(tabItems[1].classList.contains('active')){
-        let str = "";
+        list.innerHTML = '';
         todolists.forEach ((todolist) => {
             if (todolist.check == false){
-                str += `
-                    <li class="list_item">
-                        <label for="" class="checkbox">
-                            <input type="checkbox" name="checkbox" id="">
-                            <span>${todolist.content}</span>
-                        </label>
-                        <a href="#" class="delete"></a>
-                    </li>
-                `
+                const createLi = document.createElement('li');
+                const createLabel = document.createElement('label');
+                const createInput = document.createElement('input');
+                const createSpan = document.createElement('span');
+                const createA = document.createElement('a');
+                createLi.classList.add('list_item');
+                createLabel.classList.add('checkbox');
+                createA.classList.add('delete');
+                createInput.type = 'checkbox';
+                createInput.name = 'checkbox';
+                createSpan.innerText = todolist.content;
+                createA.href = '#';
+                createLabel.appendChild(createInput);
+                createLabel.appendChild(createSpan);
+                createLi.appendChild(createLabel);
+                createLi.appendChild(createA);
+                list.appendChild(createLi);
             }else{
                 return
             }
         });
-        list.innerHTML = str;
         const listItem = document.querySelectorAll('.list_item');
-        taskRemain.innerHTML = `${listItem.length} 個待完成的項目`;
+        taskRemain.innerText = `${listItem.length} 個待完成的項目`;
 
     // Render tabItems--Checked
     }else{
-        let str = "";
+        list.innerHTML = '';
         todolists.forEach ((todolist) => {
             if (todolist.check == true){
-                str += `
-                    <li class="list_item">
-                        <label for="" class="checkbox">
-                            <input type="checkbox" name="checkbox" id="" checked>
-                            <span>${todolist.content}</span>
-                        </label>
-                        <a href="#" class="delete"></a>
-                    </li>
-                `
+                const createLi = document.createElement('li');
+                const createLabel = document.createElement('label');
+                const createInput = document.createElement('input');
+                const createSpan = document.createElement('span');
+                const createA = document.createElement('a');
+                createLi.classList.add('list_item');
+                createLabel.classList.add('checkbox');
+                createA.classList.add('delete');
+                createInput.checked = true;
+                createInput.type = 'checkbox';
+                createInput.name = 'checkbox';
+                createSpan.innerText = todolist.content;
+                createA.href = '#';
+                createLabel.appendChild(createInput);
+                createLabel.appendChild(createSpan);
+                createLi.appendChild(createLabel);
+                createLi.appendChild(createA);
+                list.appendChild(createLi);
             }else{
                 return
             }
         });
-        list.innerHTML = str;
         const listItem = document.querySelectorAll('.list_item');
-        taskRemain.innerHTML = `${listItem.length} 個已完成的項目`;
+        taskRemain.innerText = `${listItem.length} 個已完成的項目`;
     }
 };
 
