@@ -9,7 +9,7 @@ const taskRemain = document.querySelector('.task_remain');
 const taskOrganize = document.querySelector('.task_organize');
 
 // Set Up LocalStorage
-var todolists;
+let todolists;
 if(localStorage.getItem('todolists') === null){
     todolists = [];
 }else{
@@ -20,18 +20,27 @@ if(localStorage.getItem('todolists') === null){
 renderData();
 
 // Add Todolist
-btnAdd.addEventListener('click', ()=>{
-    if(txt.value == "") {
+btnAdd.addEventListener('click', addTodo);
+function addTodo() {
+    if(txt.value.trim() == "") {
         alert('請輸入內容');
         return;
     }else{
-        let todolist = {};
-        todolist.content = txt.value;
-        todolist.check = false;
+        let todolist = {
+            content: txt.value,
+            check: false
+        };
         todolists.push(todolist);
         localStorage.setItem('todolists', JSON.stringify(todolists));
         renderData();
         txt.value = "";
+    }
+};
+
+// Press Key Enter
+txt.addEventListener('keypress', e => {
+    if(e.key == 'Enter') {
+        addTodo();
     }
 });
 
@@ -40,8 +49,8 @@ list.addEventListener('click', e => {
     if(e.target.getAttribute("class") !== "delete"){
         return;
     }else{
-        const todoText = e.target.parentElement.children[0].innerText;
-        todolists.splice(todolists.map(x => x.content).indexOf(todoText), 1);
+        let todoIndex = e.target.closest('li').dataset.num;
+        todolists.splice(todoIndex, 1);
         localStorage.setItem('todolists', JSON.stringify(todolists));
         renderData();
     }
@@ -51,16 +60,8 @@ list.addEventListener('click', e => {
 taskOrganize.addEventListener('click', () => {
     let deleteChecked = confirm('您確定要刪除所有已完成的項目嗎？')
     if(deleteChecked == true) {
-        todolists.forEach(todolist => {
-            if(todolist.check == true){
-                const todoText = todolist.content;
-                todolists.splice(todolists.map(x => x.content).indexOf(todoText), 1);
-                localStorage.setItem('todolists', JSON.stringify(todolists));
-                renderData();
-            }else{
-                return
-            }
-        });
+        todolists = todolists.filter((todolist) => todolist.check == false);
+        renderData();
     }else{
         return
     }
@@ -71,8 +72,7 @@ list.addEventListener('click', e => {
     if(e.target.name !== 'checkbox'){
         return
     }else{
-        const todoText = e.target.parentElement.children[1].innerText;
-        const todoIndex = todolists.map(x => x.content).indexOf(todoText);
+        let todoIndex = e.target.closest('li').dataset.num;
         if(todolists[todoIndex].check == false) {
             todolists[todoIndex].check = true;
         }else{
@@ -102,19 +102,20 @@ function renderData() {
     // Render tabItems--All
     if(tabItems[0].classList.contains('active')){
         list.innerHTML = '';
-        todolists.forEach ((todolist) => {
+        todolists.forEach ((todolist, index) => {
             if (todolist.check == false){
                 const createLi = document.createElement('li');
                 const createLabel = document.createElement('label');
                 const createInput = document.createElement('input');
                 const createSpan = document.createElement('span');
                 const createA = document.createElement('a');
+                createLi.dataset.num = index;
                 createLi.classList.add('list_item');
                 createLabel.classList.add('checkbox');
                 createA.classList.add('delete');
                 createInput.type = 'checkbox';
                 createInput.name = 'checkbox';
-                createSpan.innerText = todolist.content;
+                createSpan.textContent = todolist.content;
                 createA.href = '#';
                 createLabel.appendChild(createInput);
                 createLabel.appendChild(createSpan);
@@ -127,13 +128,14 @@ function renderData() {
                 const createInput = document.createElement('input');
                 const createSpan = document.createElement('span');
                 const createA = document.createElement('a');
+                createLi.dataset.num = index;
                 createLi.classList.add('list_item');
                 createLabel.classList.add('checkbox');
                 createA.classList.add('delete');
                 createInput.checked = true;
                 createInput.type = 'checkbox';
                 createInput.name = 'checkbox';
-                createSpan.innerText = todolist.content;
+                createSpan.textContent = todolist.content;
                 createA.href = '#';
                 createLabel.appendChild(createInput);
                 createLabel.appendChild(createSpan);
@@ -143,24 +145,25 @@ function renderData() {
             }
         });
         const listItem = document.querySelectorAll('.list_item');
-        taskRemain.innerText = `總共 ${listItem.length} 個項目`;
+        taskRemain.textContent = `總共 ${listItem.length} 個項目`;
 
     // Render tabItems--Unchecked
     }else if(tabItems[1].classList.contains('active')){
         list.innerHTML = '';
-        todolists.forEach ((todolist) => {
+        todolists.forEach ((todolist, index) => {
             if (todolist.check == false){
                 const createLi = document.createElement('li');
                 const createLabel = document.createElement('label');
                 const createInput = document.createElement('input');
                 const createSpan = document.createElement('span');
                 const createA = document.createElement('a');
+                createLi.dataset.num = index;
                 createLi.classList.add('list_item');
                 createLabel.classList.add('checkbox');
                 createA.classList.add('delete');
                 createInput.type = 'checkbox';
                 createInput.name = 'checkbox';
-                createSpan.innerText = todolist.content;
+                createSpan.textContent = todolist.content;
                 createA.href = '#';
                 createLabel.appendChild(createInput);
                 createLabel.appendChild(createSpan);
@@ -172,25 +175,26 @@ function renderData() {
             }
         });
         const listItem = document.querySelectorAll('.list_item');
-        taskRemain.innerText = `${listItem.length} 個待完成的項目`;
+        taskRemain.textContent = `${listItem.length} 個待完成的項目`;
 
     // Render tabItems--Checked
     }else{
         list.innerHTML = '';
-        todolists.forEach ((todolist) => {
+        todolists.forEach ((todolist, index) => {
             if (todolist.check == true){
                 const createLi = document.createElement('li');
                 const createLabel = document.createElement('label');
                 const createInput = document.createElement('input');
                 const createSpan = document.createElement('span');
                 const createA = document.createElement('a');
+                createLi.dataset.num = index;
                 createLi.classList.add('list_item');
                 createLabel.classList.add('checkbox');
                 createA.classList.add('delete');
                 createInput.checked = true;
                 createInput.type = 'checkbox';
                 createInput.name = 'checkbox';
-                createSpan.innerText = todolist.content;
+                createSpan.textContent = todolist.content;
                 createA.href = '#';
                 createLabel.appendChild(createInput);
                 createLabel.appendChild(createSpan);
@@ -202,7 +206,7 @@ function renderData() {
             }
         });
         const listItem = document.querySelectorAll('.list_item');
-        taskRemain.innerText = `${listItem.length} 個已完成的項目`;
+        taskRemain.textContent = `${listItem.length} 個已完成的項目`;
     }
 };
 
